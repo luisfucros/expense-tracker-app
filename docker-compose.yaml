@@ -1,0 +1,71 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: expense_tracker_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: expense_tracker
+      MYSQL_USER: app
+      MYSQL_PASSWORD: appsecret
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-psecret"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: expense_tracker_api
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      APP_ENV: development
+      PORT: 8080
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: app
+      DB_PASSWORD: appsecret
+      DB_NAME: expense_tracker
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production-use-strong-secret}
+      JWT_EXPIRY_HOURS: 24
+    ports:
+      - "8080:8080"
+
+  mysql_test:
+    image: mysql:8.0
+    container_name: expense_tracker_db_test
+    restart: "no"
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: expense_tracker_test
+    ports:
+      - "3307:3306"
+    tmpfs:
+      - /var/lib/mysql
+    healthcheck:
+      test:
+        ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-psecret"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 20s
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "9090:8080"
+
+volumes:
+  mysql_data:
