@@ -10,6 +10,7 @@ import (
 	"github.com/luisfucros/expense-tracker-app/internal/config"
 	v1 "github.com/luisfucros/expense-tracker-app/internal/router/v1"
 	"github.com/luisfucros/expense-tracker-app/internal/handler"
+	_ "github.com/luisfucros/expense-tracker-app/internal/docs"
 )
 
 // New creates and configures a gin.Engine with all middleware and routes.
