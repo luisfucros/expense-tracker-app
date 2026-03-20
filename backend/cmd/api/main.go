@@ -30,6 +30,7 @@ import (
 
 	"github.com/joho/godotenv"
 
+	_ "github.com/luisfucros/expense-tracker-app/docs"
 	"github.com/luisfucros/expense-tracker-app/internal/config"
 	"github.com/luisfucros/expense-tracker-app/internal/router"
 	"github.com/luisfucros/expense-tracker-app/internal/server"
