@@ -9,10 +9,11 @@ import (
 
 	"github.com/luisfucros/expense-tracker-app/internal/config"
 	v1 "github.com/luisfucros/expense-tracker-app/internal/router/v1"
+	"github.com/luisfucros/expense-tracker-app/internal/handler"
 )
 
 // New creates and configures a gin.Engine with all middleware and routes.
-func New(cfg *config.Config, log *zap.Logger) *gin.Engine {
+func New(cfg *config.Config, h *handler.Handler, log *zap.Logger) *gin.Engine {
 	if cfg.Env == "production" {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -32,7 +33,7 @@ func New(cfg *config.Config, log *zap.Logger) *gin.Engine {
 	}
 
 	// Mount v1 routes
-	v1.RegisterRoutes(r)
+	v1.RegisterRoutes(r, h, cfg.JWTSecret)
 
 	return r
 }

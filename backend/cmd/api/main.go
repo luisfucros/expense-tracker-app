@@ -1,3 +1,20 @@
+// @title           Expense Tracker API
+// @version         1.0
+// @description     REST API for managing personal expenses with JWT authentication.
+//
+// @contact.name   API Support
+// @contact.email  support@expensetracker.io
+//
+// @license.name  MIT
+//
+// @host      localhost:8080
+// @BasePath  /api/v1
+//
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description JWT token obtained from POST /auth/login or /auth/register. Enter value as: **Bearer &lt;token&gt;**
+
 package main
 
 import (
@@ -17,9 +34,16 @@ import (
 	"github.com/luisfucros/expense-tracker-app/internal/router"
 	"github.com/luisfucros/expense-tracker-app/internal/server"
 	"github.com/luisfucros/expense-tracker-app/migrations"
-	mysqlrepo "github.com/luisfucros/expense-tracker-app/internal/repository/db"
+	"github.com/luisfucros/expense-tracker-app/internal/repository"
+	"github.com/luisfucros/expense-tracker-app/internal/service"
+	"github.com/luisfucros/expense-tracker-app/internal/handler"
+	dbrepo "github.com/luisfucros/expense-tracker-app/internal/repository/db"
 	applogger "github.com/luisfucros/expense-tracker-app/pkg/logger"
 )
+
+// Ensure interfaces are satisfied at compile time.
+var _ repository.UserRepository = (*dbrepo.UserRepo)(nil)
+// var _ repository.ExpenseRepository = (*dbrepo.ExpenseRepo)(nil)
 
 func main() {
 	_ = godotenv.Load()
@@ -38,7 +62,7 @@ func main() {
 	defer log.Sync() //nolint:errcheck
 
 	// Connect to MySQL via GORM
-	db, err := mysqlrepo.Connect(cfg.DSN())
+	db, err := dbrepo.Connect(cfg.DSN())
 	if err != nil {
 		log.Sugar().Fatalf("failed to connect to database: %v", err)
 	}
@@ -57,7 +81,16 @@ func main() {
 		log.Sugar().Fatalf("failed to run migrations: %v", err)
 	}
 
-	engine := router.New(cfg, log)
+	// Wire repositories
+	userRepo := dbrepo.NewUserRepository(db)
+
+	// Wire services
+	authSvc := service.NewAuthService(userRepo, cfg)
+
+	// Wire handler
+	h := handler.NewHandler(authSvc, log)
+
+	engine := router.New(cfg, h, log)
 
 	addr := fmt.Sprintf(":%s", cfg.Port)
 	srv := server.New(addr, engine)
