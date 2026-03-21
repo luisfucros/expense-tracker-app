@@ -84,12 +84,14 @@ func main() {
 
 	// Wire repositories
 	userRepo := dbrepo.NewUserRepository(db)
+	expenseRepo := dbrepo.NewExpenseRepository(db)
 
 	// Wire services
 	authSvc := service.NewAuthService(userRepo, cfg)
+	expenseSvc := service.NewExpenseService(expenseRepo)
 
 	// Wire handler
-	h := handler.NewHandler(authSvc, log)
+	h := handler.NewHandler(authSvc, expenseSvc, log)
 
 	engine := router.New(cfg, h, log)
 

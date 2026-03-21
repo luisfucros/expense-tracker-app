@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 
-	"expense-tracker/internal/domain/apierror"
+	"github.com/luisfucros/expense-tracker-app/internal/domain/apierror"
 )
 
 // Auth returns a Gin middleware that validates JWT Bearer tokens.

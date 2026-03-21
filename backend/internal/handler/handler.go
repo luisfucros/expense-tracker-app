@@ -26,15 +26,15 @@ type errorResponse struct {
 // Handler holds shared dependencies for all HTTP handlers.
 type Handler struct {
 	AuthService    service.AuthService
-	// ExpenseService service.ExpenseService
+	ExpenseService service.ExpenseService
 	Log            *zap.Logger
 }
 
 // NewHandler creates a Handler with the provided services and logger.
-func NewHandler(authSvc service.AuthService, log *zap.Logger) *Handler {
+func NewHandler(authSvc service.AuthService, expenseSvc service.ExpenseService, log *zap.Logger) *Handler {
 	return &Handler{
 		AuthService:    authSvc,
-		// ExpenseService: expenseSvc,
+		ExpenseService: expenseSvc,
 		Log:            log,
 	}
 }

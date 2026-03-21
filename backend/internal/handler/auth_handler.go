@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/luisfucros/expense-tracker-app/internal/domain/model"
-	// appvalidator "expense-tracker/pkg/validator"
+	appvalidator "github.com/luisfucros/expense-tracker-app/pkg/validator"
 )
 
 // AuthHandler handles authentication-related HTTP routes.
@@ -41,10 +41,10 @@ func (ah *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	// if err := appvalidator.Validate(input); err != nil {
-	// 	ah.Fail(c, err)
-	// 	return
-	// }
+	if err := appvalidator.Validate(input); err != nil {
+		ah.Fail(c, err)
+		return
+	}
 
 	resp, err := ah.AuthService.Register(c.Request.Context(), input)
 	if err != nil {
@@ -77,10 +77,10 @@ func (ah *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	// if err := appvalidator.Validate(input); err != nil {
-	// 	ah.Fail(c, err)
-	// 	return
-	// }
+	if err := appvalidator.Validate(input); err != nil {
+		ah.Fail(c, err)
+		return
+	}
 
 	resp, err := ah.AuthService.Login(c.Request.Context(), input)
 	if err != nil {

@@ -16,10 +16,10 @@ type UserRepository interface {
 }
 
 // ExpenseRepository defines persistence operations for Expense entities.
-// type ExpenseRepository interface {
-// 	Create(ctx context.Context, e *model.Expense) error
-// 	GetByID(ctx context.Context, id uint, userID uint) (*model.Expense, error)
-// 	Update(ctx context.Context, e *model.Expense) error
-// 	Delete(ctx context.Context, id uint, userID uint) error
-// 	List(ctx context.Context, userID uint, filter model.ExpenseFilter) ([]*model.Expense, int64, error)
-// }
+type ExpenseRepository interface {
+	Create(ctx context.Context, e *model.Expense) error
+	GetByID(ctx context.Context, id uint, userID uint) (*model.Expense, error)
+	Update(ctx context.Context, e *model.Expense) error
+	Delete(ctx context.Context, id uint, userID uint) error
+	List(ctx context.Context, userID uint, filter model.ExpenseFilter) ([]*model.Expense, int64, error)
+}
