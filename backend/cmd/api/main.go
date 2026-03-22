@@ -47,8 +47,11 @@ var _ repository.UserRepository = (*dbrepo.UserRepo)(nil)
 var _ repository.ExpenseRepository = (*dbrepo.ExpenseRepo)(nil)
 
 func main() {
-	// Load .env file if present (ignore error in production/Docker)
-	_ = godotenv.Load()
+	// Load .env for local/dev/test only — never load a .env file when APP_ENV=production
+	// so secrets on the host cannot override container/orchestrator env by mistake.
+	if os.Getenv("APP_ENV") != "production" {
+		_ = godotenv.Load()
+	}
 
 	// Load configuration
 	cfg, err := config.Load()
