@@ -51,4 +51,4 @@ jobs:
       - name: Vet and test
         run: |
           go vet ./...
-          go test ./... -race -count=1
+          go test ./... -race -count=1 -v
