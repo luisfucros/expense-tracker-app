@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+// Config holds all application configuration loaded from environment variables.
 type Config struct {
 	Env            string
 	Port           string
@@ -18,6 +19,7 @@ type Config struct {
 	JWTExpiryHours int
 }
 
+// Load reads configuration from environment variables and returns a Config.
 func Load() (*Config, error) {
 	jwtExpiry := 24
 	if v := os.Getenv("JWT_EXPIRY_HOURS"); v != "" {
@@ -43,6 +45,7 @@ func Load() (*Config, error) {
 	return cfg, nil
 }
 
+// DSN returns the MySQL data source name string for GORM.
 func (c *Config) DSN() string {
 	return fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=UTC",

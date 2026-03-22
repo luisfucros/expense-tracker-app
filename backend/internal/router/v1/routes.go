@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/luisfucros/expense-tracker-app/internal/handler"
 	"github.com/luisfucros/expense-tracker-app/internal/middleware"
 )

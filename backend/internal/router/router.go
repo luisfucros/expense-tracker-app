@@ -1,7 +1,7 @@
 package router
 
 import (
-	// "github.com/gin-contrib/cors"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -21,12 +21,16 @@ func New(cfg *config.Config, h *handler.Handler, log *zap.Logger) *gin.Engine {
 
 	r := gin.New()
 
+	// Apply global middleware
+	r.Use(middleware.Recovery(log))
+	r.Use(middleware.Logger(log))
+
 	// CORS configuration
-	// corsConfig := cors.DefaultConfig()
-	// corsConfig.AllowOrigins = []string{"http://localhost:3000", "http://frontend:3000"}
-	// corsConfig.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
-	// corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
-	// r.Use(cors.New(corsConfig))
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowOrigins = []string{"http://localhost:3000", "http://frontend:3000"}
+	corsConfig.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
+	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	r.Use(cors.New(corsConfig))
 
 	// Swagger UI — available at /swagger/index.html (disabled in production)
 	if cfg.Env != "production" {
