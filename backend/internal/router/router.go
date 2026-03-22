@@ -7,6 +7,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
 
+	"github.com/luisfucros/expense-tracker-app/internal/middleware"
 	"github.com/luisfucros/expense-tracker-app/internal/config"
 	v1 "github.com/luisfucros/expense-tracker-app/internal/router/v1"
 	"github.com/luisfucros/expense-tracker-app/internal/handler"
