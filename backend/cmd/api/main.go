@@ -44,17 +44,20 @@ import (
 
 // Ensure interfaces are satisfied at compile time.
 var _ repository.UserRepository = (*dbrepo.UserRepo)(nil)
-// var _ repository.ExpenseRepository = (*dbrepo.ExpenseRepo)(nil)
+var _ repository.ExpenseRepository = (*dbrepo.ExpenseRepo)(nil)
 
 func main() {
+	// Load .env file if present (ignore error in production/Docker)
 	_ = godotenv.Load()
 
+	// Load configuration
 	cfg, err := config.Load()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to load config: %v\n", err)
 		os.Exit(1)
 	}
 
+	// Initialize logger
 	log, err := applogger.New(cfg.Env)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to initialize logger: %v\n", err)
@@ -93,11 +96,13 @@ func main() {
 	// Wire handler
 	h := handler.NewHandler(authSvc, expenseSvc, log)
 
+	// Build router
 	engine := router.New(cfg, h, log)
 
+	// Create HTTP server
 	addr := fmt.Sprintf(":%s", cfg.Port)
 	srv := server.New(addr, engine)
-	
+
 	// Start server in background
 	go func() {
 		log.Sugar().Infof("starting server on %s", addr)
