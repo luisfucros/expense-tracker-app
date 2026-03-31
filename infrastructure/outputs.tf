@@ -35,9 +35,14 @@ output "rds_endpoint" {
   sensitive   = true
 }
 
-output "rds_secret_arn" {
-  description = "ARN of the Secrets Manager secret that holds RDS credentials"
-  value       = module.rds.secret_arn
+output "rds_username" {
+  description = "Master username for the RDS instance"
+  value       = module.rds.db_username
+}
+
+output "rds_db_name" {
+  description = "Database name"
+  value       = module.rds.db_name
 }
 
 output "docker_login_command" {

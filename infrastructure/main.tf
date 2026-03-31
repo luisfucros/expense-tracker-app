@@ -45,6 +45,7 @@ module "rds" {
   eks_node_sg_id    = module.eks.node_security_group_id
   db_name           = var.rds_db_name
   db_username       = var.rds_username
+  db_password       = var.rds_db_password
   instance_class    = var.rds_instance_class
   allocated_storage = var.rds_allocated_storage
 }

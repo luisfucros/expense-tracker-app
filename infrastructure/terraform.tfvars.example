@@ -17,3 +17,7 @@ rds_instance_class    = "db.t3.micro"
 rds_db_name           = "expense_tracker"
 rds_username          = "app"
 rds_allocated_storage = 20
+
+# Set the DB password via this file (excluded from git) or the environment:
+#   export TF_VAR_rds_db_password="your-strong-password"
+rds_db_password = "REPLACE_WITH_STRONG_PASSWORD"

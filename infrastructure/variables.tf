@@ -90,3 +90,9 @@ variable "rds_allocated_storage" {
   type        = number
   default     = 20
 }
+
+variable "rds_db_password" {
+  description = "Master password for the RDS instance — set via TF_VAR_rds_db_password or terraform.tfvars (never commit)"
+  type        = string
+  sensitive   = true
+}
